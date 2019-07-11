@@ -1,0 +1,146 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+/* Formatação de todo o menu */
+.menu{
+    position: fixed;
+    width: 100%;
+    height: 65px;
+    box-align: center;
+    color:#222;
+    background: linear-gradient(135deg, rgb(245, 97, 102), rgb(245, 95, 163));
+    font-family: 'Delius', cursive;
+    font-size: 25px;
+}
+/*Formatação da lista de itens*/
+.menu ul{
+    list-style: none; /*define o marcador dos itens da lista*/
+    position: relative; /*define o posicionamento a partir do seu prórpio canto esquerdo superior*/
+}
+/*Formatação da posição dos itens*/
+.menu ul li{
+    width: auto;/*define largura de cada elemento que compreenderá o item*/
+    float: left;/*torna cada um dos item flutuantes na borda superior do elemento bloco*/
+}
+/*Formatação dos links*/
+.menu a{
+    padding: 15px;/*define espaçamento entre o texto e a borda do elemento*/
+    display: block;/*centraliza o texto no meio da linha do bloco*/
+    text-decoration: none; /*sublinhado*/
+    text-align: center;/*centraliza o texto no centro da coluna*/
+    background-color:transparent; /*define cor do fundo do elemento*/
+    color: #fff;/*cor da fonte*/
+}
+.menu ul ul{
+    position: relative;/*define o posicionamento do elemento a partir do canto esquerdo superior do elemento guia (pai)*/
+    visibility: hidden;/*mantém o elemento oculto*/
+}
+.menu ul li:hover ul{
+    visibility: visible;/*ativa exibição do elemento a partir do cursor do mouse sem que haja necessidade de clicar*/
+}
+.menu a:hover{
+    background-color: transparent #222;/*define a cor do fundo do elemento quando o do mouse estiver sobre ele*/
+    color: #555;/*define a cor da fonte do elemento quando o do moue estiver sobre ele*/
+}
+.menu ul ul li{
+    float: none;/*desativa o modo flutuante, mantendo os subitens alinhados um abaixo do outro*/
+    border-bottom: solid 1px #ccc;/*cria uma borda de 1px*/
+}
+.menu ul ul li a{
+    /*background-color: rgb(236, 190, 174);define a cor do fundo do elemento*/
+    background: linear-gradient(135deg, rgb(248, 139, 143), rgb(247, 151, 194));
+}
+.menu ul ul ul{
+    position: absolute;
+    visibility: hidden;/*mantém o elemento oculto*/
+    left: 100%;
+}
+/*.menu ul ul li:hover ul li{
+    visibility: visible;ativa exibição do elemento a partir do cursor do mouse sem que haja necessidade de clicar
+}*/
+/*.menu ul ul li ul{
+    float: right;/*desativa o modo flutuante, mantendo os subitens alinhados um abaixo do outro
+    border-bottom: solid 1px #ccc;/*cria uma borda de 1px
+}*/
+.menu ul ul li a{
+    background-color: rgb(236, 190, 174);/*define a cor do fundo do elemento*/
+}
+label[for="bt_menu"]{
+    padding: 5px;
+    background: linear-gradient(135deg, rgb(248, 139, 143), rgb(247, 151, 194));
+    color:#fff;
+    font-family: 'Delius', cursive;
+    text-align: center;
+    font-size: 30px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
+#bt_menu{
+    display: none;
+}
+.safado{
+    visibility: hidden;
+}
+.fac:hover li {
+    visibility: visible;
+}
+.safado1{
+    visibility: hidden;
+}
+.cur:hover li {
+    visibility: visible;
+}
+label[for="bt_menu"]{
+    display: none;
+}
+.menu ul ul ul li a{
+    background: linear-gradient(135deg, rgb(248, 193, 195), rgb(236, 186, 208));
+}
+@media(max-width: 650px){
+
+    label[for="bt_menu"]{
+        display: block;
+    }
+    #bt_menu:checked ~.menu{
+        margin-left: 0;
+    }
+    .menu{
+        margin-top: 5px;
+        margin-left: -100%;
+        transition: all 2.5s; 
+        width: 300px;
+    }
+    .menu ul li{
+        float: none;
+        width: 300px;
+        background: linear-gradient(135deg, rgb(245, 97, 102), rgb(245, 95, 163));
+    }
+    .menu ul ul{
+        position: static;
+        overflow: hidden;
+        max-height: 0;
+        transition: all .4s;
+    }
+    .menu ul li:hover ul{
+        height: auto;
+        max-height: 600px;
+        visibility: visible;
+    }
+    .menu ul ul ul{
+        position: static;
+        overflow: hidden;
+        /* max-height: 0; */
+        transition: all .4s;
+    }
+    .smenu ul ul li:hover ul {
+        height: auto;
+        /* max-height: 200px; */
+        visibility: visible;
+    }
+}
+main div{
+    background-size: auto;
+    background-image: url("Projeto_Pessoal/imagem.png");
+}
