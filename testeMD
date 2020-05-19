@@ -1,0 +1,94 @@
+**1. Projeto**
+
+| Projeto | Centralização de Receita |
+|-----------|----------------------|
+| Sistema | Sistema de Gerenciamento de Taxi - BH12 |
+| Funcionalidade         | Inclusão de Lançamento BH12                                |
+| Descrição da Funcionalidade | Essa funcionalidade tem o objetivo de incluir lançamentos de infração de Táxi (BH12) no sistema SIATU   |
+
+**2. Revisões**
+
+| **Data**   | **Versão** | **Descrição**        | **Autor** |
+|------------|-------------------------|----------------------|-----------|
+| 04/05/2020 | 1.00  | Elaboração do documento | Viviane Santana  |
+|            |                         |                      |           |
+
+**Fluxo da Funcionalidade**  
+*	O fluxo da funcionalidade se inicia a partir da tela Emissão de Notificação da Penalidade de Multa ( *Fiscalização > Controle de Infrações > Notificação Infração > Emissão*).
+
+*   Ao acionar o comando *Imprimir*, o sistema emite as notificações de penalidade no BH12. 
+
+*   Em seguida, a aplicação aciona a view *V_TAXI_INCLUSAO_LANCAMENTO* para selecionar os registros de infração de táxi para inclusão no SIATU. 
+
+*   A partir dos dados selecionados pela view *V_TAXI_INCLUSAO_LANCAMENTO*, a aplicação filtra os registros a serem incluídos no SIATU pelos parâmetros informados na tela "*DATA_GERA_AUTA*" ou "*NUM_AUTA_INIC* e *NUM_AUTA_FINA*", por meio da query *filtra_reg_incl_lanc.sql*.
+
+[filtra_reg_incl_lanc.sql](/uploads/beb5d50bc007fc78ad670d2134226982/filtra_reg_incl_lanc.sql)
+
+*   A aplicação aciona o serviço *INCLUSAOLANCAMENTO*, responsável pelo envio das informações para inclusão do lançamento de ocorrência de infração no SIATU, por meio de um arquivo JSON, com a seguinte estrutura:
+
+|***entrada***| | | |
+| | **Campo**                 | **Tipo** | **Descrição**          |
+| |---------------------------|----------|----------------------|
+| |***CodigoEstrutura***|Integer| Código da Estrutura de Arrecadação | 
+| |***CodigoCobrança*** |Integer|Código de Cobrança do lançamento|
+| |***GerenciaCobranca***|Integer|Código do Órgao de Cobrança|
+| |***CodigoNacional***|Integer|Código Nacional do Contribuinte|
+| |***TipoRelacionamentotributario***|Integer|Código do Tipo de relacionamento tributário entre o contribuinte e a PBH|
+| |***TipoIdentificador***|Integer|Codigo do tipo de identificador do relacionamento tributário|
+| |***Identificador***|String|Identificador do relacionamento tributário|
+| |***endereco***| |Informações do endereço do contribuinte|
+| |***tipo_logradouro***|String|Tipo do logradouro|
+| |***nome_logradouro***|String|Nome do logradouro|
+| |***nome_bairro***|String|Nome do bairro|
+| |***numero_imovel_logradouro***|String|Número do imóvel no logradouro|
+| |***complemento***|String|Complemento do endereço|
+| |***numero_cep***| |Número do CEP com 8 posições numéricas |
+| |***cidade***|String|Nome da cidade|
+| |***unidade_federacao***|String|Sigla da Unidade da Federação|
+| |***NumeroProcesso***|String|Número do Processo de inclusão|
+| |***DataLancamento***|String|Data do lançamento|
+| |***DataNotificacao***|String|Data da Notificação do contribuinte|
+| |***TipoNotificacao***|Integer|Código da forma de notificação do contribuinte|
+| |***DataVencimento***|String|Data de Vencimento do lançamento|
+| |***DataBaseCorrecao***|String|Data base para cálculo da correção monetária|
+| |***QtdParcelas***|Integer|Quantidade de parcelas no exercício|
+| |***Valor***|String|Valor total do lançamento|
+| |***Observacao***|String|Obsrvação referente ao processo de lançamento|
+| |***dados_componente***| |Informações referentes aos componentes do lançamento|
+| |***lista_componente***| |Lista dos componentes do lançamento|
+| |***componente***| |Dados do componente|
+| |***codigo_natureza_divida***|String|Código da natureza da dívida do componente|
+| |***data_referencia***|String|Data de referência do componente|
+| |***valor***|String|Valor do Componente|
+| |***dados_detalhe***| |Informações referentes aos detalhes do lançamento que servem para identificar, por exemplo, a placa do veículo para a qual foi aplicada a multa|
+| |***list_detalhe***| |Lista dos detalhes do lançamento|
+| |***detalhe***| |Dados do detalhe|
+| |***codigo_tipo_detalhe***|String|Código do tipo de detalhe informado|
+| |***conteudo***|String|Conteúdo do detalhe|
+|***codigo_convenio***|String|Código do convênio|
+|***codigo_servico***|String|Código do serviço|
+
+
+*   Caso ocorra algum erro de acesso ao serviço, deverá ser incluído na tabela *TAXI_LOG_ERRO_SIATU*. **(?mensagem?)**
+
+*   Na momento da inclusão no SIATU, os lançamentos deverão ser incluídos:
+
+    *   com ?status? **PROVISÓRIO**.
+
+    *   com **parcela única**.
+
+    *   com **Data de Notificação do Contribuinte** igual à data de emissão da notificação (tabela *???*)
+
+*   SIATU realiza a inclusão do lançamento e envia o retorno **(??)**.
+
+*   Caso ocorra algum erro de inclusão do lançament no SIATU, deverá ser incluído na tabela *TAXI_LOG_ERRO_SIATU*.
+**(?mensagem?)**
+
+*   Caso a inclusão sej realizada sem ocorrência de erros, a partir dos dados retornados pelo SIATU, a aplicação atualiza os campos *COD_LANC_SIATU*, *DAT_VENC_LANC_SIATU*, *DAT_ENVI_SIATU*, *NUM_MATR_ENVI_SIATU*, na tabela *TAXI_AUTO_INFRACAO*.
+
+*   Será gerada uma guia referente ao lançamento incluído no SIATU.
+
+*   O SIATU retornará os dados da guia gerada. **(??)**
+
+*   A partir do retorno dos dados da guia gerada pelo SIATU, incluir a guia na tabela *TAXI_GUIA_SIATU*. 
+
